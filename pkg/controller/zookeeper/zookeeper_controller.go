@@ -126,6 +126,7 @@ func (r *ReconcileZookeeper) Reconcile(request reconcile.Request) (reconcile.Res
 		if err != nil {
 			return reconcile.Result{}, err
 		}
+		return reconcile.Result{Requeue: true}, nil
 	}
 
 	// Define a new statefulset object
@@ -145,8 +146,19 @@ func (r *ReconcileZookeeper) Reconcile(request reconcile.Request) (reconcile.Res
 		if err != nil {
 			return reconcile.Result{}, err
 		}
+		return reconcile.Result{Requeue: true}, nil
 	}
 
+	// ensure replicas size
+	if *statefulsetFound.Spec.Replicas != instance.Spec.Servers {
+		statefulsetFound.Spec.Replicas = &instance.Spec.Servers
+		err = r.client.Update(context.TODO(), statefulsetFound)
+		if err != nil {
+			reqLogger.Error(err, "Failed to update StatefulSet", "StatefulSet.Namespace", statefulsetFound.Namespace, "StatefulSet.Name", statefulsetFound.Name)
+			return reconcile.Result{}, err
+		}
+		reqLogger.Info("Update StatefulSet", "StatefulSet.Namespace", statefulsetFound.Namespace, "StatefulSet.Name", statefulsetFound.Name)
+	}
 	// Zookeeper already exists - don't requeue
 	reqLogger.Info("Skip reconcile: Zookeeper already exists", "Zookeeper.Namespace", instance.Namespace, "Zookeeper.Name", instance.Name)
 	return reconcile.Result{}, nil

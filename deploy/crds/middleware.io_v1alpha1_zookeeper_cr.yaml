@@ -5,7 +5,7 @@ metadata:
   namespace: ops-middleware
 spec:
   # Add fields here
-  servers: 3 # odd num
+  servers: 3 # odd num, support update
   resources:
     requests:
       cpu: 100m
