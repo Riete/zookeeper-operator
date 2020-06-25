@@ -4,6 +4,7 @@
 * kubernetes: v1.14+
 * go version: v1.13+
 * docker version: 17.03+
+* zookeeper version: 3.4.10
 
 
 ### build 
