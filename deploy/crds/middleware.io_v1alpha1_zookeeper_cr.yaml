@@ -1,0 +1,20 @@
+apiVersion: middleware.io/v1alpha1
+kind: Zookeeper
+metadata:
+  name: zookeeper
+  namespace: ops-middleware
+spec:
+  # Add fields here
+  servers: 3 # odd num
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
+    limits:
+      cpu: 200m
+      memory: 1Gi
+  # storageclass名称和存储大小，创建存储用，选填
+  # storageClass: alicloud-nas
+  # storageSize: 2Gi
+  # jvm heap
+  heap: 512M
